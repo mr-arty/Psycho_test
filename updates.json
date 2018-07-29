@@ -1,0 +1,54 @@
+{
+  "ok": true,
+  "result": [
+    {
+      "update_id": 778080128,
+      "message": {
+        "message_id": 4,
+        "from": {
+          "id": 52220600,
+          "is_bot": false,
+          "first_name": "Arty",
+          "username": "Arty_R",
+          "language_code": "ru-ru"
+        },
+        "chat": {
+          "id": 52220600,
+          "first_name": "Arty",
+          "username": "Arty_R",
+          "type": "private"
+        },
+        "date": 1532806755,
+        "text": "/start",
+        "entities": [
+          {
+            "offset": 0,
+            "length": 6,
+            "type": "bot_command"
+          }
+        ]
+      }
+    },
+    {
+      "update_id": 778080129,
+      "message": {
+        "message_id": 5,
+        "from": {
+          "id": 52220600,
+          "is_bot": false,
+          "first_name": "Arty",
+          "username": "Arty_R",
+          "language_code": "ru-ru"
+        },
+        "chat": {
+          "id": 52220600,
+          "first_name": "Arty",
+          "username": "Arty_R",
+          "type": "private"
+        },
+        "date": 1532806777,
+        "text": "Привет, бот"
+      }
+    }
+  ]
+}
