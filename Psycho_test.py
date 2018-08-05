@@ -1,6 +1,7 @@
 import requests
 import settings
 import json
+from questions import *
 from time import sleep
 
 global URL
@@ -8,20 +9,7 @@ URL = 'https://api.telegram.org/bot' + settings.API_token
 global last_update_id
 last_update_id = 0
 
-a = []
-a.append('1. Вы завидуете благополучию некоторых своих знакомых.')  # список вопросов
-a.append('2. Вы недовольны отношениями в семье.')
-a.append('3. Вы считаете, что достойны лучшей участи.')
-a.append('4. Вы полагаете, что смогли бы достичь большего в личной жизни или в работе, если бы не обстоятельства.')
-a.append('5. Вас огорчает то, что не осуществляются планы и не сбываются надежды.')
-a.append('6. Вы часто срываете зло или досаду на ком-либо.')
-a.append('7. Вас злит, что кому-то везет в жизни больше, чем вам.')
-a.append('8. Вас огорчает, что вам не удается отдыхать или проводить досуг так, как того хочется.')
-a.append('9. Ваше материальное положение таково, что угнетает вас.')
-a.append('10. Вы считаете, что жизнь проходит мимо вас (проходит зря).')
-a.append('11. Кто-то или что-то постоянно унижает вас.')
-a.append('12. Нерешенные бытовые проблемы выводят вас из равновесия.')
-
+b = []  #Объявляем пустой массив
 
 def send_req():
     # payload = {'key':settings.API_token}
@@ -51,26 +39,28 @@ def get_message():
                    'update_id': cur_update_id}
         return message
     return None
-#get_message()
+
 
 def send_message(chat_id, text = 'Wait, please...'):
     requests.get(URL + '/sendmessage?chat_id={}&text={}'.format(chat_id, text))
 
 def test(chat_id):
     send_message(chat_id, 'Привет! Я предлагаю тебе пройти очень простой психологический тест.')
-    send_message(chat_id, 'В нем всего несколько простых вопросов. Для ответа введи + или - на клавиатуре.')
+    send_message(chat_id, 'В нем всего несколько простых вопросов. Для ответа введи или - на клавиатуре.')
     i = 0
     points = 0
     while i < 12:
         send_message(chat_id, a[i])
-        sleep(15)
+        sleep(10)
 
-        ans = get_message()['text']
-
-
-        if ans == None:
+        if get_message() is not None:
+            m = get_message()     #TypeError: 'NoneType' object is not subscriptable
+            ans = m['text']
+        else:
+            ans = 0
             continue
-        elif ans == '+':
+
+        if ans == '+':
             points += 1
         elif ans == '-':
             i += 1
@@ -81,11 +71,15 @@ def test(chat_id):
         i += 1
     if points <= 4:
         send_message(chat_id, 'С тобой все хорошо! Фрустрация отсутствует.')
+        b.append('a')
     elif points <= 9:
         send_message(chat_id, 'У тебя есть тенденция к фрустрации. Тебе нужно немного расслабиться!')
+        b.append('b')
     else:
         send_message(chat_id, 'Внимание! У тебя сильная фрустрация. Обратись к психологу!')
+        b.append('c')
     send_message(chat_id,'Тест окончен. Спасибо!')
+    return True
 
 def main():
     sleep(10)
@@ -94,8 +88,13 @@ def main():
     text = m['text']
 
     if text == '/start':
-        test(chat_id_c)
-        #send_message(chat_id, 'I\'m doin fine, g')
-
+        while True:
+            test(chat_id_c)
+            send_message(chat_id_c, 'Хочешь сыграть еще раз?')
+            sleep(10)
+            if text == '/finish' or text == 'нет':
+                break
+            elif text == 'да':
+                continue
 if __name__ == '__main__':
     main()
